@@ -11,7 +11,8 @@
     "build:node": "node tools/build-node.js",
     "build:libui": "node tools/build-libui.js",
     "build:libui-node": "node tools/build-libui-node.js",
-    "build:launchui": "node tools/build-launchui.js"
+    "build:launchui": "node tools/build-launchui.js",
+    "package": "node tools/package.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,8 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@mischnic/async-hooks": "0.0.4",
+    "archiver": "^2.1.1",
     "autogypi": "^0.2.2",
     "extract-zip": "^1.6.7",
     "nbind": "^0.3.15",
