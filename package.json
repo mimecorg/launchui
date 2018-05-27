@@ -1,0 +1,42 @@
+{
+  "name": "launchui",
+  "version": "0.1.0",
+  "description": "Launcher for GUI Node.js applications using libui-node",
+  "scripts": {
+    "download": "npm run download:node && npm run download:libui && npm run download:libui-node",
+    "download:node": "node tools/download.js node",
+    "download:libui": "node tools/download.js libui",
+    "download:libui-node": "node tools/download.js libui-node",
+    "build": "npm run build:node && npm run build:libui && npm run build:libui-node && npm run build:launchui",
+    "build:node": "node tools/build-node.js",
+    "build:libui": "node tools/build-libui.js",
+    "build:libui-node": "node tools/build-libui-node.js",
+    "build:launchui": "node tools/build-launchui.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mimecorg/launchui.git"
+  },
+  "keywords": [
+    "node",
+    "libui",
+    "launcher",
+    "desktop"
+  ],
+  "author": "Michał Męciński",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mimecorg/launchui/issues"
+  },
+  "homepage": "https://github.com/mimecorg/launchui",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "autogypi": "^0.2.2",
+    "extract-zip": "^1.6.7",
+    "nbind": "^0.3.15",
+    "node-gyp": "^3.6.2",
+    "nugget": "^2.0.1",
+    "rimraf": "^2.6.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "node": {
+    "version": "8.11.1",
+    "url": "https://github.com/nodejs/node/archive/v${version}.zip"
+  },
+  "libui": {
+    "version": "alpha3.5-master-002",
+    "url": "https://github.com/parro-it/libui/archive/${version}.zip"
+  },
+  "libui-node": {
+    "version": "0.2.0",
+    "url": "https://github.com/parro-it/libui-node/archive/v${version}.zip"
+  }
+}
