@@ -16,6 +16,8 @@ int APIENTRY wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCm
     wcscpy( dirPath, exePath );
     PathRemoveFileSpec( dirPath );
 
+    SetCurrentDirectory( dirPath );
+
     PathCombine( scriptPath, dirPath, L"app\\main.js" );
 
     char exePathUtf8[ MAX_PATH + 1 ];
