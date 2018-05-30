@@ -39,7 +39,7 @@ launchui.download( {
   platform: 'win32',
   arch: 'ia32',
   cache: './.cache'
-}, ( err, zipPath ) {
+}, function ( err, zipPath ) {
   // zipPath will be the path of the downloaded or existing package
 } );
 ```
