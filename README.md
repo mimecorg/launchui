@@ -24,11 +24,37 @@ Download the binary package for your platform from [Releases](https://github.com
 
 You can rename `launchui.exe` to a different name. You can also replace the default icon and version information, for example using [rcedit](https://github.com/electron/rcedit).
 
+## API
+
+LaunchUI provides an API for downloading the binary package for the given platform and architecture.
+
+```js
+const launchui = require( 'launchui' );
+
+launchui.download( {
+  version: '0.1.0',
+  platform: 'win32',
+  arch: 'ia32',
+  cache: './.cache'
+}, ( err, zipPath ) {
+  // zipPath will be the path of the downloaded or existing package
+} );
+```
+
+The `download()` function supports the following options:
+
+- `version`: Version of the binary package to download. The default value is the current version of the launchui module.
+- `platform`: The platform of the package. The default value is `process.platform`.
+- `arch`: The architecture of the package. The default value is `process.arch`.
+- `cache`: Path of the directory where the downloaded package is stored. The default cache location is `~/.launchui`.
+
+The current version of the launchui module is available as `launchui.version`.
+
 ## Building
 
 Use the following command to download and extract the source codes of Node.js, libui and libui-node to the `deps/` subdirectory:
 
-```
+```bash
 npm run download
 ```
 
@@ -36,7 +62,7 @@ You can edit `tools/download-deps.json` to change the versions of downloaded pac
 
 Use the following command to build all dependencies and the LaunchUI executable in 32-bit or 64-bit mode:
 
-```
+```bash
 npm run build --arch=[ia32|x64]
 ```
 
