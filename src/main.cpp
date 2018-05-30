@@ -39,8 +39,38 @@ static void UncaughtException( const v8::FunctionCallbackInfo<v8::Value>& args )
     exit( 1 );
 }
 
+#if WIN32
+
+static HINSTANCE app_instance;
+
+static void UpdateWindowIcon()
+{
+    WNDCLASSEX wcex;
+    ZeroMemory( &wcex, sizeof( wcex ) );
+    wcex.cbSize = sizeof( wcex );
+
+    HINSTANCE dll_instance = LoadLibrary( L"libui.dll" );
+
+    GetClassInfoEx( dll_instance, L"libui_uiWindowClass", &wcex );
+
+    int small_cx = GetSystemMetrics( SM_CXSMICON );
+    int small_cy = GetSystemMetrics( SM_CYSMICON );
+
+    wcex.hIcon = LoadIcon( app_instance, MAKEINTRESOURCE( 1 ) );
+    wcex.hIconSm = (HICON)LoadImage( app_instance, MAKEINTRESOURCE( 1 ), IMAGE_ICON, small_cx, small_cy, LR_DEFAULTCOLOR );
+
+    UnregisterClass( wcex.lpszClassName, dll_instance );
+    RegisterClassEx( &wcex );
+}
+
+#endif
+
 static void register_launchui( v8::Local<v8::Object> exports, v8::Local<v8::Value> module, v8::Local<v8::Context> context, void* priv )
 {
+#if WIN32
+    UpdateWindowIcon();
+#endif
+
     v8::Isolate* isolate = context->GetIsolate();
 
     v8::Local<v8::FunctionTemplate> function_template = v8::FunctionTemplate::New( isolate, UncaughtException );
@@ -107,6 +137,8 @@ static const char* GetApplicationPath()
 
 int APIENTRY wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
+    app_instance = hInstance;
+
     const char* app_path = GetApplicationPath();
 
     int exit_code = StartNode( app_path );
