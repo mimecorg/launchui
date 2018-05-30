@@ -2,6 +2,12 @@
   "name": "launchui",
   "version": "0.1.0",
   "description": "Launcher for GUI Node.js applications using libui-node",
+  "main": "index.js",
+  "files": [
+    "app",
+    "src",
+    "tools"
+  ],
   "scripts": {
     "download": "npm run download:node && npm run download:libui && npm run download:libui-node",
     "download:node": "node tools/download.js node",
@@ -30,8 +36,9 @@
     "url": "https://github.com/mimecorg/launchui/issues"
   },
   "homepage": "https://github.com/mimecorg/launchui",
-  "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "nugget": "^2.0.1"
+  },
   "devDependencies": {
     "@mischnic/async-hooks": "0.0.4",
     "archiver": "^2.1.1",
@@ -39,7 +46,6 @@
     "extract-zip": "^1.6.7",
     "nbind": "^0.3.15",
     "node-gyp": "^3.6.2",
-    "nugget": "^2.0.1",
     "rimraf": "^2.6.2"
   }
 }
