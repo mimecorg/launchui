@@ -2,6 +2,9 @@
 
 Launcher for GUI Node.js applications using [libui-node](https://github.com/parro-it/libui-node).
 
+[![NPM module](https://img.shields.io/npm/v/launchui.svg)](https://npmjs.org/package/launchui)
+[![MIT License](https://img.shields.io/github/license/mimecorg/launchui.svg)](https://github.com/mimecorg/launchui/blob/master/LICENSE)
+
 ## Introduction
 
 LaunchUI is a wrapper for Node.js which makes it easier to package and distribute GUI applications using libui-node to end users.
