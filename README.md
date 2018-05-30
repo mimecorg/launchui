@@ -79,6 +79,12 @@ To build LaunchUI on Windows, you will need the following prerequisites:
 
 Support for Linux and OS X will be added soon.
 
+Use the following command to create a binary package in the `packages/` subdirectory:
+
+```bash
+npm run package --arch=[ia32|x64]
+```
+
 ## Development status
 
 At the moment LaunchUI is in an early stage of development. Currently only Windows is supported. Here's the high level roadmap for future versions:
