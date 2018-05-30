@@ -9,7 +9,7 @@ if( WIN32 )
 
   add_executable( launchui WIN32 main.cpp launchui.rc )
 
-  target_compile_definitions( launchui PRIVATE UNICODE _CRT_SECURE_NO_WARNINGS BUILDING_NODE_EXTENSION )
+  target_compile_definitions( launchui PRIVATE UNICODE BUILDING_NODE_EXTENSION )
 
   target_include_directories( launchui PRIVATE ${DEPS_DIR}/node/src ${DEPS_DIR}/node/deps/v8/include ${DEPS_DIR}/libui )
 
