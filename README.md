@@ -23,9 +23,17 @@ LaunchUI was created for [Vuido](https://github.com/mimecorg/vuido), but it shou
 
 ## Usage
 
-Download the binary package for your platform from [Releases](https://github.com/mimecorg/launchui/releases), unpack it and replace the example `app/main.js` script with your application script.
+The easiest way to package an application using LaunchUI is to use the [LaunchUI Packager](https://github.com/mimecorg/launchui-packager).
 
-You can rename `launchui.exe` to a different name. You can also replace the default icon and version information, for example using [rcedit](https://github.com/electron/rcedit).
+You can also manually download the binary package for your platform from [Releases](https://github.com/mimecorg/launchui/releases), unpack it and replace the example `app/main.js` script with your application script. You can rename `launchui.exe` to a different name and replace the default icon and version information using [rcedit](https://github.com/electron/rcedit).
+
+## Installation
+
+You can install LaunchUI locally if you want to use the LaunchUI API in your custom build scripts:
+
+```bash
+npm install --save-dev launchui
+```
 
 ## API
 
