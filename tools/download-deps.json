@@ -4,11 +4,11 @@
     "url": "https://github.com/nodejs/node/archive/v${version}.zip"
   },
   "libui": {
-    "version": "alpha3.5-master-002",
+    "version": "alpha3.5-master-008",
     "url": "https://github.com/parro-it/libui/archive/${version}.zip"
   },
   "libui-node": {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "url": "https://github.com/parro-it/libui-node/archive/v${version}.zip"
   }
 }
