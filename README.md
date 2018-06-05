@@ -7,29 +7,25 @@ Launcher for GUI Node.js applications using [libui-node](https://github.com/parr
 
 ## Introduction
 
-LaunchUI is a wrapper for Node.js which makes it easier to package and distribute GUI applications using libui-node to end users.
+Although native desktop applications can run in the standard Node.js environment, it is recommended to use [LaunchUI](https://github.com/mimecorg/launchui) to package and distribute them to end users.
 
-Although libui-node is designed to work with standard Node.js, most regular users don't know how to install packages using npm and run them using the command line. Usually they don't even have Node.js installed. So applications using libui-node must be shipped with the Node.js executable.
+Thanks to LaunchUI, users don't need to install any packages using npm or to use the command line. They don't even need to have Node.js installed. They can simply download the package, unzip it and run the application by double-clicking its icon.
 
-The problem is that Node.js is designed to create command line applications, not GUI applications. It means that:
-
-- You have to create a wrapper script which runs node with the path to your application. But most users will click on the Node icon, not on the wrapper script.
-- On Windows, a console window is opened when you run the application.
-- If there is an error, it is printed to the console window, which is then immediately closed.
-
-LaunchUI wraps Node.js with a small executable which automaticaly runs your application. No console window is opened and in case of a fatal error, it is reported using a message box.
+LaunchUI wraps Node.js with a small executable which automatically runs the application. No console window is opened and in case of a fatal error, it is reported using a message box.
 
 LaunchUI was created for [Vuido](https://github.com/mimecorg/vuido), but it should also work with [Proton Native](https://proton-native.js.org/) and applications using vanilla libui-node.
 
 ## Usage
 
-The easiest way to package an application using LaunchUI is to use the [LaunchUI Packager](https://github.com/mimecorg/launchui-packager).
+The easiest way to create a package for your application is to use the [LaunchUI Packager](https://github.com/mimecorg/launchui-packager). It provides an API for creating packages for Windows, Linux and OS X.
 
-You can also manually download the binary package for your platform from [Releases](https://github.com/mimecorg/launchui/releases), unpack it and replace the example `app/main.js` script with your application script. You can rename `launchui.exe` to a different name and replace the default icon and version information using [rcedit](https://github.com/electron/rcedit).
+You can also manually download the binary package for the target platform from [LaunchUI releases](https://github.com/mimecorg/launchui/releases), unpack it and replace the example `app/main.js` script with your application script.
 
 ## Installation
 
-You can install LaunchUI locally if you want to use the LaunchUI API in your custom build scripts:
+Usually there is no need to install LaunchUI, because during development you can use standard Node.js to run your application, and for creating packages it's recommended to use LaunchUI Packager which provides a more robust API.
+
+You can install LaunchUI locally if you want to download the binary packages in your custom build scripts:
 
 ```bash
 npm install --save-dev launchui
@@ -37,7 +33,7 @@ npm install --save-dev launchui
 
 ## API
 
-LaunchUI provides an API for downloading the binary package for the given platform and architecture.
+LaunchUI provides an API for downloading the binary packages for the given platform and architecture.
 
 ```js
 const launchui = require( 'launchui' );
@@ -63,6 +59,8 @@ The current version of the launchui module is available as `launchui.version`.
 
 ## Building
 
+Building LaunchUI is only necessary if you need to make some customizations. In most cases it's enough to use the binary packages provided in the [LaunchUI releases](https://github.com/mimecorg/launchui/releases).
+
 Use the following command to download and extract the source codes of Node.js, libui and libui-node to the `deps/` subdirectory:
 
 ```bash
@@ -77,6 +75,8 @@ Use the following command to build all dependencies and the LaunchUI executable 
 npm run build --arch=[ia32|x64]
 ```
 
+The `--arch` option is only supported on Windows. It makes it possible to select 32-bit or 64-bit target architecture. On Linux and OS X the target architecture is the same as the host architecture.
+
 To build LaunchUI on Windows, you will need the following prerequisites:
 
 - [Visual Studio 2017](https://www.visualstudio.com/downloads/) with C++ support
@@ -85,7 +85,13 @@ To build LaunchUI on Windows, you will need the following prerequisites:
 - [NASM](http://www.nasm.us/)
 - Unix tools (they are installed as part of [Git for Windows](http://git-scm.com/download/win))
 
-Support for Linux and OS X will be added soon.
+To build LaunchUI on Linux, you will need:
+
+- [build-essential](https://packages.ubuntu.com/xenial/build-essential)
+- [GTK+3](https://packages.ubuntu.com/source/xenial/gtk+3.0)
+- [CMake](https://cmake.org/download/) 3.0 or newer
+
+Support for OS X will be added soon.
 
 Use the following command to create a binary package in the `packages/` subdirectory:
 
@@ -93,12 +99,14 @@ Use the following command to create a binary package in the `packages/` subdirec
 npm run package --arch=[ia32|x64]
 ```
 
+The `--arch` option is only supported on Windows.
+
 ## Development status
 
 At the moment LaunchUI is in an early stage of development. Currently only Windows is supported. Here's the high level roadmap for future versions:
 
-- [ ] Create a utility for automatic packaging
-- [ ] Add Linux support
+- [x] Create a utility for automatic packaging
+- [x] Add Linux support
 - [ ] Add OS X support
 
 ## License
