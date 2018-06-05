@@ -5,14 +5,10 @@ const archiver = require( 'archiver' );
 
 const version = require( '../package' ).version;
 
-const arch = process.env.npm_config_arch || process.arch;
-
-if ( process.platform == 'win32' ) {
-  packageWin32( arch );
-} else {
-  console.error( 'Error: Unsupported platform: ' + process.platform );
-  process.exit( 1 );
-}
+if ( process.platform == 'win32' )
+  packageWin32( process.env.npm_config_arch || process.arch );
+else
+  package();
 
 function packageWin32( arch ) {
   const { findVisualStudio } = require( './win32-utils' );
@@ -61,6 +57,36 @@ function packageWin32( arch ) {
 
   archive.glob( '*.dll', { cwd: ucrtDir } );
 
+  packageCommon( archive );
+
+  archive.finalize();
+}
+
+function package() {
+  console.log( 'Creating package for ' + process.platform + '-' + process.arch );
+
+  const packagesDir = path.join( __dirname, '../packages' );
+
+  if ( !fs.existsSync( packagesDir ) )
+    fs.mkdirSync( packagesDir );
+
+  const zipName = 'launchui-v' + version + '-' + process.platform + '-' + process.arch + '.zip';
+
+  const output = fs.createWriteStream( path.join( packagesDir, zipName ) );
+  const archive = archiver( 'zip', { zlib: { level: 9 } } );
+
+  archive.pipe( output );
+
+  archive.file( path.join( __dirname, '../build/launchui' ), { name: 'launchui' } );
+  archive.file( path.join( __dirname, '../deps/node/out/Release/lib.target/libnode.so.57' ), { name: 'libnode.so.57' } );
+  archive.file( path.join( __dirname, '../deps/libui/build/out/libui.so.0' ), { name: 'libui.so.0' } );
+
+  packageCommon( archive );
+
+  archive.finalize();
+}
+
+function packageCommon( archive ) {
   archive.file( path.join( __dirname, '../deps/node/LICENSE' ), { name: 'LICENSE.node' } );
   archive.file( path.join( __dirname, '../deps/libui/LICENSE' ), { name: 'LICENSE.libui' } );
   archive.file( path.join( __dirname, '../LICENSE' ), { name: 'LICENSE.launchui' } );
@@ -84,6 +110,4 @@ function packageWin32( arch ) {
   } );
 
   archive.file( path.join( __dirname, '../app/main.js' ), { name: 'app/main.js' } );
-
-  archive.finalize();
 }

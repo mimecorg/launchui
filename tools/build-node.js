@@ -1,14 +1,10 @@
 const path = require( 'path' );
 const child_process = require( 'child_process' );
 
-const arch = process.env.npm_config_arch || process.arch;
-
-if ( process.platform == 'win32' ) {
-  buildNodeWin32( arch );
-} else {
-  console.error( 'Error: Unsupported platform: ' + process.platform );
-  process.exit( 1 );
-}
+if ( process.platform == 'win32' )
+  buildNodeWin32( process.env.npm_config_arch || process.arch );
+else
+  buildNode();
 
 function buildNodeWin32( arch ) {
   const { findVisualStudio, getVSArch, findNasm, findPython, findUnixTools } = require( './win32-utils' );
@@ -33,6 +29,22 @@ function buildNodeWin32( arch ) {
   const nodeDir = path.join( __dirname, '../deps/node' );
 
   const result = child_process.spawnSync( 'vcbuild.bat', [ buildArch, 'dll' ], { cwd: nodeDir, stdio: 'inherit' } );
+
+  if ( result.error != null )
+    throw result.error;
+}
+
+function buildNode() {
+  console.log( 'Building node for ' + process.platform + '-' + process.arch );
+
+  const nodeDir = path.join( __dirname, '../deps/node' );
+
+  let result = child_process.spawnSync( './configure', [ '--shared' ], { cwd: nodeDir, stdio: 'inherit' } );
+
+  if ( result.error != null )
+    throw result.error;
+
+  result = child_process.spawnSync( 'make', { cwd: nodeDir, stdio: 'inherit' } );
 
   if ( result.error != null )
     throw result.error;

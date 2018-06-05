@@ -15,5 +15,11 @@ if( WIN32 )
 
   target_link_libraries( launchui PRIVATE ${DEPS_DIR}/node/Release/node.lib ${DEPS_DIR}/libui/build/out/libui.lib shlwapi.lib )
 else()
-  message( FATAL_ERROR "Currently only the win32 platform is supported by launchui" )
+  add_executable( launchui main.cpp )
+
+  target_compile_definitions( launchui PRIVATE BUILDING_NODE_EXTENSION )
+
+  target_include_directories( launchui PRIVATE ${DEPS_DIR}/node/src ${DEPS_DIR}/node/deps/v8/include ${DEPS_DIR}/libui )
+
+  target_link_libraries( launchui PRIVATE -no-pie -Wl,-rpath=$ORIGIN -L. -lnode -lui )
 endif()
