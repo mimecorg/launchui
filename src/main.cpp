@@ -3,6 +3,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlwapi.h>
+#else
+#include <string.h>
+#include <unistd.h>
 #endif
 
 #include <node.h>
@@ -108,7 +111,23 @@ static int StartNode( const char* app_path )
         NULL
     };
 
-    return node::Start( node_argc, const_cast<char**>( node_argv ) );
+    int length = 0;
+    for ( int i = 0; i < node_argc; i++ )
+        length += strlen( node_argv[ i ] ) + 1;
+
+    char* buffer = new char[ length ];
+
+    int pos = 0;
+    for ( int i = 0; i < node_argc; i++ ) {
+        node_argv[ i ] = strcpy( buffer + pos, node_argv[ i ] );
+        pos += strlen( node_argv[ i ] ) + 1;
+    }
+
+    int exit_code = node::Start( node_argc, const_cast<char**>( node_argv ) );
+
+    delete[] buffer;
+
+    return exit_code;
 }
 
 #ifdef WIN32
@@ -152,6 +171,16 @@ int APIENTRY wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCm
 
 int main( int argc, char** argv )
 {
+    char* separator = strrchr( argv[ 0 ], '/' );
+
+    if ( separator != NULL ) {
+        int length = separator - argv[ 0 ];
+        char* app_dir_path = new char[ length + 1 ];
+        strncpy( app_dir_path, argv[ 0 ], length );
+        chdir( app_dir_path );
+        delete[] app_dir_path;
+    }
+
     return StartNode( argv[ 0 ] );
 }
 
