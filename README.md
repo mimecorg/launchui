@@ -91,7 +91,10 @@ To build LaunchUI on Linux, you will need:
 - [GTK+3](https://packages.ubuntu.com/source/xenial/gtk+3.0)
 - [CMake](https://cmake.org/download/) 3.0 or newer
 
-Support for OS X will be added soon.
+To build LaunchUI on OS X, you will need:
+
+- Xcode
+- [CMake](https://cmake.org/download/) 3.0 or newer
 
 Use the following command to create a binary package in the `packages/` subdirectory:
 
@@ -100,14 +103,6 @@ npm run package --arch=[ia32|x64]
 ```
 
 The `--arch` option is only supported on Windows.
-
-## Development status
-
-At the moment LaunchUI is in an early stage of development. Currently only Windows is supported. Here's the high level roadmap for future versions:
-
-- [x] Create a utility for automatic packaging
-- [x] Add Linux support
-- [ ] Add OS X support
 
 ## License
 
