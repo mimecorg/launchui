@@ -28,19 +28,23 @@ function buildLaunchUI() {
   const nodeDir = path.join( __dirname, '../deps/node' );
   const libuiDir = path.join( __dirname, '../deps/libui' );
 
-  const nodeSrc = path.join( nodeDir, 'out/Release/lib.target/libnode.so.57' );
-  const nodeDest = path.join ( buildDir, 'libnode.so' );
+  const nodeSrc = path.join( nodeDir, process.platform == 'darwin' ? 'out/Release/libnode.57.dylib' : 'out/Release/lib.target/libnode.so.57' );
+  const nodeDest = path.join ( buildDir, process.platform == 'darwin' ? 'libnode.dylib' : 'libnode.so' );
 
   if ( !fs.existsSync( nodeDest ) )
     fs.symlinkSync( nodeSrc, nodeDest );
 
-  const libuiSrc = path.join( libuiDir, 'build/out/libui.so.0' );
-  const libuiDest = path.join ( buildDir, 'libui.so' );
+  const libuiSrc = path.join( libuiDir, process.platform == 'darwin' ? 'build/out/libui.A.dylib' : 'build/out/libui.so.0' );
+  const libuiDest = path.join ( buildDir, process.platform == 'darwin' ? 'libui.dylib' : 'libui.so' );
 
   if ( !fs.existsSync( libuiDest ) )
     fs.symlinkSync( libuiSrc, libuiDest );
 
-  let result = child_process.spawnSync( 'cmake', [ '-DCMAKE_BUILD_TYPE=Release', '../src' ], { cwd: buildDir, stdio: 'inherit' } );
+  let cmakePath = 'cmake';
+  if ( process.platform == 'darwin' && fs.existsSync( '/Applications/CMake.app/Contents/bin/cmake' ) )
+    cmakePath = '/Applications/CMake.app/Contents/bin/cmake';
+
+  let result = child_process.spawnSync( cmakePath, [ '-DCMAKE_BUILD_TYPE=Release', '../src' ], { cwd: buildDir, stdio: 'inherit' } );
 
   if ( result.error != null )
     throw result.error;

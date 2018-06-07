@@ -48,4 +48,11 @@ function buildNode() {
 
   if ( result.error != null )
     throw result.error;
+
+  if ( process.platform == 'darwin' ) {
+    result = child_process.spawnSync( 'install_name_tool', [ '-id', '@rpath/libnode.57.dylib', 'out/Release/libnode.57.dylib' ], { cwd: nodeDir, stdio: 'inherit' } );
+
+    if ( result.error != null )
+      throw result.error;
+  }
 }

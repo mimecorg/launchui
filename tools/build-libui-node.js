@@ -60,11 +60,11 @@ function buildLibuiNode() {
   const libuiDir = path.join( __dirname, '../deps/libui' );
   const libuiNodeDir = path.join( __dirname, '../deps/libui-node' );
 
-  const libSrc = path.join( libuiDir, 'build/out/libui.so.0' );
-  const libDest = path.join ( libuiNodeDir, 'libui.so' );
+  const libuiSrc = path.join( libuiDir, process.platform == 'darwin' ? 'build/out/libui.A.dylib' : 'build/out/libui.so.0' );
+  const libuiDest = path.join ( libuiNodeDir, process.platform == 'darwin' ? 'libui.dylib' : 'libui.so' );
 
-  if ( !fs.existsSync( libDest ) )
-    fs.symlinkSync( libSrc, libDest );
+  if ( !fs.existsSync( libuiDest ) )
+    fs.symlinkSync( libuiSrc, libuiDest );
 
   const headerSrc = path.join( libuiDir, 'ui.h' );
   const headerDest = path.join ( libuiNodeDir, 'ui.h' );

@@ -17,9 +17,16 @@ if( WIN32 )
 else()
   add_executable( launchui main.cpp )
 
+  set_property( TARGET launchui PROPERTY CXX_STANDARD 11 )
+
   target_compile_definitions( launchui PRIVATE BUILDING_NODE_EXTENSION )
 
   target_include_directories( launchui PRIVATE ${DEPS_DIR}/node/src ${DEPS_DIR}/node/deps/v8/include ${DEPS_DIR}/libui )
 
-  target_link_libraries( launchui PRIVATE -no-pie -Wl,-rpath=$ORIGIN -L. -lnode -lui )
+  if( APPLE )
+    set_target_properties( launchui PROPERTIES INSTALL_RPATH "@loader_path" BUILD_WITH_INSTALL_RPATH TRUE )
+    target_link_libraries( launchui PRIVATE -L. -lnode -lui )
+  else()
+    target_link_libraries( launchui PRIVATE -no-pie -Wl,-rpath=$ORIGIN -L. -lnode -lui )
+  endif()
 endif()

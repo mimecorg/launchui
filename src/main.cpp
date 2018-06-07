@@ -175,8 +175,16 @@ int main( int argc, char** argv )
 
     if ( separator != NULL ) {
         int length = separator - argv[ 0 ];
+#ifdef __APPLE__
+        const char* resources_dir = "/../Resources";
+        int resources_length = strlen( resources_dir );
+        char* app_dir_path = new char[ length + resources_length + 1 ];
+        strncpy( app_dir_path, argv[ 0 ], length );
+        strcpy( app_dir_path + length, resources_dir );
+#else
         char* app_dir_path = new char[ length + 1 ];
         strncpy( app_dir_path, argv[ 0 ], length );
+#endif
         chdir( app_dir_path );
         delete[] app_dir_path;
     }

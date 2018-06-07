@@ -25,7 +25,11 @@ function buildLibui() {
   if ( !fs.existsSync( buildDir ) )
     fs.mkdirSync( buildDir );
 
-  let result = child_process.spawnSync( 'cmake', [ '-DCMAKE_BUILD_TYPE=Release', '..' ], { cwd: buildDir, stdio: 'inherit' } );
+  let cmakePath = 'cmake';
+  if ( process.platform == 'darwin' && fs.existsSync( '/Applications/CMake.app/Contents/bin/cmake' ) )
+    cmakePath = '/Applications/CMake.app/Contents/bin/cmake';
+
+  let result = child_process.spawnSync( cmakePath, [ '-DCMAKE_BUILD_TYPE=Release', '..' ], { cwd: buildDir, stdio: 'inherit' } );
 
   if ( result.error != null )
     throw result.error;

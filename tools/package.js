@@ -7,6 +7,8 @@ const version = require( '../package' ).version;
 
 if ( process.platform == 'win32' )
   packageWin32( process.env.npm_config_arch || process.arch );
+else if ( process.platform == 'darwin' )
+  packageDarwin();
 else
   package();
 
@@ -57,7 +59,41 @@ function packageWin32( arch ) {
 
   archive.glob( '*.dll', { cwd: ucrtDir } );
 
-  packageCommon( archive );
+  packageCommon( archive, '' );
+
+  archive.finalize();
+}
+
+function packageDarwin() {
+  console.log( 'Creating package for darwin-' + process.arch );
+
+  const packagesDir = path.join( __dirname, '../packages' );
+
+  if ( !fs.existsSync( packagesDir ) )
+    fs.mkdirSync( packagesDir );
+
+  const zipName = 'launchui-v' + version + '-darwin-' + process.arch + '.zip';
+
+  const output = fs.createWriteStream( path.join( packagesDir, zipName ) );
+  const archive = archiver( 'zip', { zlib: { level: 9 } } );
+
+  archive.pipe( output );
+
+  const contentsDir = 'launchu.app/Contents/';
+
+  archive.file( path.join( __dirname, '../src/Info.plist' ), { name: contentsDir + 'Info.plist' } );
+
+  const macosDir = contentsDir + 'MacOS/'
+
+  archive.file( path.join( __dirname, '../build/launchui' ), { name: macosDir + 'launchui' } );
+  archive.file( path.join( __dirname, '../deps/node/out/Release/libnode.57.dylib' ), { name: macosDir + 'libnode.57.dylib' } );
+  archive.file( path.join( __dirname, '../deps/libui/build/out/libui.A.dylib' ), { name: macosDir + 'libui.A.dylib' } );
+
+  const resourcesDir = contentsDir + 'Resources/';
+
+  archive.file( path.join( __dirname, '../src/launchui.icns' ), { name: resourcesDir + 'launchui.icns' } );
+
+  packageCommon( archive, resourcesDir );
 
   archive.finalize();
 }
@@ -81,33 +117,33 @@ function package() {
   archive.file( path.join( __dirname, '../deps/node/out/Release/lib.target/libnode.so.57' ), { name: 'libnode.so.57' } );
   archive.file( path.join( __dirname, '../deps/libui/build/out/libui.so.0' ), { name: 'libui.so.0' } );
 
-  packageCommon( archive );
+  packageCommon( archive, '' );
 
   archive.finalize();
 }
 
-function packageCommon( archive ) {
+function packageCommon( archive, prefix ) {
   archive.file( path.join( __dirname, '../deps/node/LICENSE' ), { name: 'LICENSE.node' } );
   archive.file( path.join( __dirname, '../deps/libui/LICENSE' ), { name: 'LICENSE.libui' } );
   archive.file( path.join( __dirname, '../LICENSE' ), { name: 'LICENSE.launchui' } );
 
   [ 'package.json', 'readme.md', 'license', 'index.js', 'nbind.node' ].forEach( name => {
-    archive.file( path.join( __dirname, '../deps/libui-node/' + name ), { name: 'node_modules/libui-node/' + name } );
+    archive.file( path.join( __dirname, '../deps/libui-node/' + name ), { name: prefix + 'node_modules/libui-node/' + name } );
   } );
 
   [ 'package.json', 'README.md', 'LICENSE' ].forEach( name => {
-    archive.file( path.join( __dirname, '../node_modules/@mischnic/async-hooks/' + name ), { name: 'node_modules/@mischnic/async-hooks/' + name } );
+    archive.file( path.join( __dirname, '../node_modules/@mischnic/async-hooks/' + name ), { name: prefix + 'node_modules/@mischnic/async-hooks/' + name } );
   } );
 
-  archive.glob( '**/*.js', { cwd: path.join( __dirname, '../node_modules/@mischnic/async-hooks/' ) }, { prefix: 'node_modules/@mischnic/async-hooks/' } );
+  archive.glob( '**/*.js', { cwd: path.join( __dirname, '../node_modules/@mischnic/async-hooks/' ) }, { prefix: prefix + 'node_modules/@mischnic/async-hooks/' } );
 
   [ 'package.json', 'README.md', 'LICENSE', 'es6-shim.js' ].forEach( name => {
-    archive.file( path.join( __dirname, '../node_modules/es6-shim/' + name ), { name: 'node_modules/es6-shim/' + name } );
+    archive.file( path.join( __dirname, '../node_modules/es6-shim/' + name ), { name: prefix + 'node_modules/es6-shim/' + name } );
   } );
 
   [ 'package.json', 'README.md', 'LICENSE', 'dist/nbind.js' ].forEach( name => {
-    archive.file( path.join( __dirname, '../node_modules/nbind/' + name ), { name: 'node_modules/nbind/' + name } );
+    archive.file( path.join( __dirname, '../node_modules/nbind/' + name ), { name: prefix + 'node_modules/nbind/' + name } );
   } );
 
-  archive.file( path.join( __dirname, '../app/main.js' ), { name: 'app/main.js' } );
+  archive.file( path.join( __dirname, '../app/main.js' ), { name: prefix + 'app/main.js' } );
 }
