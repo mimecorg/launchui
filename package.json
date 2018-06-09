@@ -1,6 +1,6 @@
 {
   "name": "launchui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Launcher for GUI Node.js applications using libui-node",
   "main": "index.js",
   "files": [
