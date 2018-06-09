@@ -65,7 +65,11 @@ function packageWin32( arch ) {
 }
 
 function packageDarwin() {
+  const { getNodeModuleVersion } = require( './utils' );
+
   console.log( 'Creating package for darwin-' + process.arch );
+
+  const nodeVersion = getNodeModuleVersion();
 
   const packagesDir = path.join( __dirname, '../packages' );
 
@@ -86,7 +90,7 @@ function packageDarwin() {
   const macosDir = contentsDir + 'MacOS/'
 
   archive.file( path.join( __dirname, '../build/launchui' ), { name: macosDir + 'launchui' } );
-  archive.file( path.join( __dirname, '../deps/node/out/Release/libnode.57.dylib' ), { name: macosDir + 'libnode.57.dylib' } );
+  archive.file( path.join( __dirname, '../deps/node/out/Release/libnode.' + nodeVersion + '.dylib' ), { name: macosDir + 'libnode.' + nodeVersion + '.dylib' } );
   archive.file( path.join( __dirname, '../deps/libui/build/out/libui.A.dylib' ), { name: macosDir + 'libui.A.dylib' } );
 
   const resourcesDir = contentsDir + 'Resources/';
@@ -99,7 +103,11 @@ function packageDarwin() {
 }
 
 function package() {
+  const { getNodeModuleVersion } = require( './utils' );
+
   console.log( 'Creating package for ' + process.platform + '-' + process.arch );
+
+  const nodeVersion = getNodeModuleVersion();
 
   const packagesDir = path.join( __dirname, '../packages' );
 
@@ -114,7 +122,7 @@ function package() {
   archive.pipe( output );
 
   archive.file( path.join( __dirname, '../build/launchui' ), { name: 'launchui' } );
-  archive.file( path.join( __dirname, '../deps/node/out/Release/lib.target/libnode.so.57' ), { name: 'libnode.so.57' } );
+  archive.file( path.join( __dirname, '../deps/node/out/Release/lib.target/libnode.so.' + nodeVersion ), { name: 'libnode.so.' + nodeVersion } );
   archive.file( path.join( __dirname, '../deps/libui/build/out/libui.so.0' ), { name: 'libui.so.0' } );
 
   packageCommon( archive, '' );

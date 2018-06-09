@@ -35,7 +35,11 @@ function buildNodeWin32( arch ) {
 }
 
 function buildNode() {
+  const { getNodeModuleVersion } = require( './utils' );
+
   console.log( 'Building node for ' + process.platform + '-' + process.arch );
+
+  const nodeVersion = getNodeModuleVersion();
 
   const nodeDir = path.join( __dirname, '../deps/node' );
 
@@ -50,7 +54,9 @@ function buildNode() {
     throw result.error;
 
   if ( process.platform == 'darwin' ) {
-    result = child_process.spawnSync( 'install_name_tool', [ '-id', '@rpath/libnode.57.dylib', 'out/Release/libnode.57.dylib' ], { cwd: nodeDir, stdio: 'inherit' } );
+    const args = [ '-id', '@rpath/libnode.' + nodeVersion + '.dylib', 'out/Release/libnode.' + nodeVersion + '.dylib' ];
+
+    result = child_process.spawnSync( 'install_name_tool', args, { cwd: nodeDir, stdio: 'inherit' } );
 
     if ( result.error != null )
       throw result.error;
