@@ -79,7 +79,7 @@ function packageDarwin() {
 
   archive.pipe( output );
 
-  const contentsDir = 'launchu.app/Contents/';
+  const contentsDir = 'launchui.app/Contents/';
 
   archive.file( path.join( __dirname, '../src/Info.plist' ), { name: contentsDir + 'Info.plist' } );
 
