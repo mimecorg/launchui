@@ -14,12 +14,12 @@ function download( opts, callback ) {
 
   const fileVersion = opts.version || version;
 
-  const plaftorm = opts.plaftorm || process.platform;
+  const platform = opts.platform || process.platform;
   const arch = opts.arch || process.arch;
 
   const cacheDir = opts.cache || path.join( os.homedir(), '.launchui' );
 
-  const fileName = 'launchui-v' + fileVersion + '-' + plaftorm + '-' + arch + '.zip';
+  const fileName = 'launchui-v' + fileVersion + '-' + platform + '-' + arch + '.zip';
 
   const zipPath = path.join( cacheDir, fileName );
 
