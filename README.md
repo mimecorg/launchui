@@ -51,8 +51,8 @@ launchui.download( {
 The `download()` function supports the following options:
 
 - `version`: Version of the binary package to download. The default value is the current version of the launchui module.
-- `platform`: The platform of the package. The default value is `process.platform`.
-- `arch`: The architecture of the package. The default value is `process.arch`.
+- `platform`: The platform of the package. The default value is `process.platform`. The supported values are `win32`, `darwin` (OS X) and `linux`.
+- `arch`: The architecture of the package. The default value is `process.arch`. The supported values are `x64` (on all platforms) and `ia32` (on win32/linux only).
 - `cache`: Path of the directory where the downloaded package is stored. The default cache location is `~/.launchui`.
 
 The current version of the launchui module is available as `launchui.version`.
