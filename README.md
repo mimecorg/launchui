@@ -57,6 +57,12 @@ The `download()` function supports the following options:
 
 The current version of the launchui module is available as `launchui.version`.
 
+## Supported platforms
+
+- Windows 7 or newer (32-bit and 64-bit)
+- OS X 10.8 or newer (64-bit)
+- Linux (32-bit and 64-bit)
+
 ## Building
 
 Building LaunchUI is only necessary if you need to make some customizations. In most cases it's enough to use the binary packages provided in the [LaunchUI releases](https://github.com/mimecorg/launchui/releases).
